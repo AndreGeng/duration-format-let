@@ -1,5 +1,6 @@
 import babel from 'rollup-plugin-babel';
 import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
 
 export default {
   input: 'src/index.ts',
@@ -11,6 +12,7 @@ export default {
   },
   plugins: [
     resolve(),
+    commonjs(),
     babel({
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
     }),
