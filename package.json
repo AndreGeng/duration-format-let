@@ -1,5 +1,5 @@
 {
-  "name": "duration-humanize",
+  "name": "duration-format-let",
   "version": "1.0.0",
   "description": "",
   "main": "dist/bundle.js",
@@ -25,7 +25,6 @@
     "typescript": "^3.2.4"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.2.5",
-    "humanize-duration": "^3.17.0"
+    "@babel/polyfill": "^7.2.5"
   }
 }
