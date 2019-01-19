@@ -1,5 +1,5 @@
 {
-  "name": "duration-format",
+  "name": "duration-humanize",
   "version": "1.0.0",
   "description": "",
   "main": "dist/bundle.js",
@@ -8,7 +8,7 @@
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit watch",
     "build": "rollup -c",
-    "release": "npm run build && npm run publish"
+    "release": "npm run build && npm publish"
   },
   "keywords": [],
   "author": "",
