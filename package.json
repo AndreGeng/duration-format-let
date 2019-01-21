@@ -1,16 +1,19 @@
 {
   "name": "duration-format-let",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "dist/bundle.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit watch",
     "build": "rollup -c",
-    "release": "npm run build && npm publish"
+    "release": "jest && npm run build && npm publish"
   },
-  "keywords": ["duration", "format"],
+  "keywords": [
+    "duration",
+    "format"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
@@ -18,10 +21,13 @@
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-typescript": "^7.1.0",
+    "@types/jest": "^23.3.13",
+    "jest": "^23.6.0",
     "rollup": "^1.1.0",
     "rollup-plugin-babel": "^4.3.1",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
+    "ts-jest": "^23.10.5",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.4"
   },
@@ -30,7 +36,7 @@
   },
   "homepage": "https://github.com/AndreGeng/duration-format-let.git#readme",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/AndreGeng/duration-format-let.git"
+    "type": "git",
+    "url": "https://github.com/AndreGeng/duration-format-let.git"
   }
 }

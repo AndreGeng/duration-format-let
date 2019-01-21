@@ -9,19 +9,27 @@ enum DurationUnit {
   ms = 'ms',
 }
 type DurationUnitKey = keyof typeof DurationUnit;
-type DurationUnitDict = {
-  [key in DurationUnit]?: string;
+type DurationUnitDict<T> = {
+  [key in DurationUnit]: T;
 }
+type UnitLabelFunc = (num: number) => string;
 interface DurationFormatOption {
-  delimiter?: string;
-  unit?: DurationUnitKey;
-  disableUnits?: DurationUnitKey[],
-  labelObj?: DurationUnitDict;
+  delimiter: string;
+  unit: DurationUnitKey;
+  disableUnits: DurationUnitKey[],
+  unitMeasures: Partial<DurationUnitDict<number>>,
+  labelObj: Partial<DurationUnitDict<string | UnitLabelFunc>>;
 }
 
+const getUnitLabel = (num: number, label: string | UnitLabelFunc) => {
+  if (typeof label=== 'function') {
+    return label(num);
+  }
+  return label;
+};
 function durationFormat(
   duration: number,
-  opts: DurationFormatOption = {},
+  opts: Partial<DurationFormatOption> = {},
 ) {
   const defaultLabelObj = {
     'y': 'y',
@@ -33,36 +41,44 @@ function durationFormat(
     's': 's',
     'ms': 'ms'
   };
+  const defaultUnitMeasures = {
+    y: 365.25*24*60*60*1000,
+    mo: (365.25*24*60*60*1000)/12,
+    w: 7*24*60*60*1000,
+    d: 24*60*60*1000,
+    h: 60*60*1000,
+    m: 60*1000,
+    s: 1000,
+    ms: 1,
+  };
   const defaultOpts: DurationFormatOption = {
     delimiter: '',
     unit: DurationUnit.ms,
     disableUnits: [],
-    labelObj: {},
+    unitMeasures: defaultUnitMeasures,
+    labelObj: defaultLabelObj,
   };
-  const unitMeasures: {[index: string]: number} = {
-    y: 31557600000,
-    mo: 2629800000,
-    w: 604800000,
-    d: 86400000,
-    h: 3600000,
-    m: 60000,
-    s: 1000,
-    ms: 1,
-  };
-  const options = Object.assign({}, defaultOpts, opts);
+  const options: DurationFormatOption = Object.assign({}, defaultOpts, opts);
   options.labelObj = Object.assign({}, defaultLabelObj, options.labelObj);
-  const durationInMs = unitMeasures[options.unit as string] * duration;
+  options.unitMeasures = Object.assign({}, defaultUnitMeasures, options.unitMeasures);
+  const {
+    unitMeasures,
+  } = options as { unitMeasures: DurationUnitDict<number> };
+  const durationInMs = unitMeasures[options.unit] * duration;
   let remainMs = durationInMs;
   const result: string[] = Object.keys(unitMeasures).reduce((acc, item) => {
     const {
       disableUnits = [],
       labelObj,
-    } = options;
-    const num = Math.floor(remainMs / unitMeasures[item]);
+    } = options as { 
+      disableUnits: DurationUnitKey[],
+      labelObj: DurationUnitDict<string | UnitLabelFunc>
+    };
+    const num = Math.floor(remainMs / unitMeasures[item as DurationUnitKey]);
     if (disableUnits.indexOf(item as DurationUnitKey) === -1 &&
       num > 0) {
-      acc.push(`${num}${labelObj[item as DurationUnitKey]}`);
-      remainMs -= num * unitMeasures[item];
+      acc.push(`${num}${getUnitLabel(num, labelObj[item as DurationUnitKey])}`);
+      remainMs -= num * unitMeasures[item as DurationUnitKey];
     }
     return acc;
   }, [] as string[]);
