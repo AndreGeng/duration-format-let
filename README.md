@@ -61,4 +61,13 @@ dfl(1000*60*60*1000, {
     m: 'minute'
   }
 }); // 1month1week4day5hour30minute
+dfl(1000*60*60*1000, {
+  labelObj: {
+    mo: num => `month${num > 1 ? 's' : ''}`,
+    w: num => `week${num > 1 ? 's' : ''}`,
+    d: num => `day${num > 1 ? 's' : ''}`,
+    h: num => `hour${num > 1 ? 's' : ''}`,
+    m: num => `minute${num > 1 ? 's' : ''}`
+  }
+}); // 1month1week4days5hours30minutes
 ```
